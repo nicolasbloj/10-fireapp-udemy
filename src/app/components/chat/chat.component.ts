@@ -11,14 +11,14 @@ export class ChatComponent {
   message = '';
 
   constructor(public _chatService: ChatService) {
-    this._chatService.loadMessages().subscribe(
-      (messages: any[]) => {
-        console.log('messages ', messages);
-      }
-    );
+    this._chatService.loadChats().subscribe();
   }
 
-  sendMessage(): void {
-    console.log('message', this.message);
+  send(): void {
+    if (this.message.length > 0) {
+      this._chatService.addChat({ name: 'nicolas', message: this.message, date: new Date().getTime() })
+        .then( ( data ) => { console.log('Mensaje enviado, Data ', data); this.message = ''; })
+        .catch(e => console.error('Error ', e));
+    }
   }
 }

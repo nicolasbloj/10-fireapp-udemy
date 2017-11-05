@@ -6,7 +6,11 @@
 
 
   <div class="container main-container">
-    <app-login></app-login>
+
+    <div class="col-md-12 text-right" *ngIf="_chatService.user.uid">
+    <button class="btn btn-danger" (click)="_chatService.logout()">Salir</button>
+  </div>
+    <app-login *ngIf="!_chatService.user.uid"></app-login>
     <!-- <h1>Firechat</h1>
     <div class="jumbotron">
     <app-chat></app-chat>

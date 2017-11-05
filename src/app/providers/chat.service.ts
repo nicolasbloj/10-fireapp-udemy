@@ -58,8 +58,18 @@ export class ChatService {
       case 'google':
         this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
         break;
+      case 'twitter':
+        this.afAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider());
+        break;
+
     }
 
+
+  }
+
+  logout() {
+    this.user = {};
+    this.afAuth.auth.signOut();
   }
 
 }

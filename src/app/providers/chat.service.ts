@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
+
 import { Chat } from '../model/chat.int';
 
 @Injectable()
@@ -11,7 +14,19 @@ export class ChatService {
 
   chats: Chat[] = [];
 
-  constructor(private afs: AngularFirestore) {
+  public user: any = {};
+
+  constructor(private afs: AngularFirestore,
+    private afAuth: AngularFireAuth) {
+    this.afAuth.authState.subscribe(user => {
+      console.log('User state ', user);
+      if (!user) {
+        return;
+      } else {
+        this.user.name = user.displayName;
+        this.user.uid = user.uid;
+      }
+    });
   }
 
   loadChats() {
@@ -35,6 +50,16 @@ export class ChatService {
 
   addChat(chat: Chat): Promise<any> {
     return this.chatsCollection.add(chat);
+  }
+
+  login(provider: string) {
+    console.log(provider);
+    switch (provider) {
+      case 'google':
+        this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        break;
+    }
+
   }
 
 }

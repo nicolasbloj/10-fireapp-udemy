@@ -35,12 +35,19 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   send(): void {
     if (this.message.length > 0) {
       this.sending = true;
-      this._chatService.addChat({ name: 'nicolas', message: this.message, date: new Date().getTime() })
-        .then((data) => {
-          console.log('Mensaje enviado, Data ', data);
-          this.message = '';
-          this.sending = false;
-        })
+
+      this._chatService.addChat(
+        { // Podriamos solo mandar como parametro mensaje y en servicio setear el resto
+          name: this._chatService.user.name,
+          message: this.message,
+          date: new Date().getTime(),
+          uid: this._chatService.user.uid
+        }
+      ).then((data) => {
+        console.log('Mensaje enviado, Data ', data);
+        this.message = '';
+        this.sending = false;
+      })
         .catch((e) => { console.error('Error ', e); this.sending = false; });
     }
   }
